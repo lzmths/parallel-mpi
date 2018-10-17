@@ -1,10 +1,10 @@
-from collections import defaultdict, OrderedDict
-from os import getenv
 from re import findall
 from subprocess import call
+from collections import defaultdict, OrderedDict
+
 
 IS_IN_CLUSTER = True
-SIZES=[1, 2, 4, 8]
+SIZES=[2, 4, 8]
 MATH_FUNCTIONS=4
 
 
@@ -25,16 +25,20 @@ def clean():
 def build():
     commands = [
         "mrexec all rm -rf main.c",
+        "mrexec all rm -rf stack.h",
+        "mrexec all rm -rf stack.c",
         "mrexec all rm -rf math_function.h",
         "mrexec all rm -rf math_function.c",
         "mrexec all rm -rf main",
         "mrcp all ./main.c main.c",
+        "mrcp all ./stack.c stack.c",
+        "mrcp all ./stack.h stack.h",
         "mrcp all ./math_function.c math_function.c",
         "mrcp all ./math_function.h math_function.h",
-        "mrexec all mpicc -o main main.c -std=c11 -lm"
+        "mrexec all mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
-        commands = ["mpicc main.c math_function.c -o main"]
+        commands = ["mpicc main.c math_function.c stack.c -o main"]
     run_commands(commands)
 
 
@@ -67,12 +71,26 @@ def generate_metrics():
     for line in arquive:
         line = line.strip()
         tag = None
-        if "Time-around-quad" in line:
-            tag = "quad"
-            typo = "Time-around-quad"
-        elif "Time-total" in line:
+        if "Time-executor" in line or "Result:" in line:
+            continue
+        elif "Time-start-program" in line:
+            tag = "start"
+            typo = "Time-start-program"
+        elif "Time-calculator" in line:
+            tag = "calc"
+            typo = "Time-calculator"
+        elif "Time-network" in line:
+            tag = "net"
+            typo = "Time-network"
+        elif "Time-diff-end-end" in line:
+            tag = "end"
+            typo = "Time-diff-end-end"
+        elif "Time-coordinator" in line:
+            tag = "coordinator"
+            typo = "Time-coordinator"
+        elif "Time" in line:
             tag = "total"
-            typo = "Time-total"
+            typo = "Time"
 
         if tag:
             node, time = get_node_time(line, typo)
@@ -81,9 +99,18 @@ def generate_metrics():
         elif "mpirun -np" in line:
             nodes, function = build_head(line)
 
-    print("nodes,function,node,quad,total")
+    print("nodes,function,node,start,calc,net,end,total")
     for node, values in OrderedDict(sorted(data.items())).items():
-        print("{},{},{}".format(node, values["quad"], values["total"]))
+        if "calc" in values:
+            print("{},{},{},{},{},{}".format(
+                node, values["start"], values["calc"], 
+                values["net"], values["end"], values["total"]
+            ))
+        else:
+            print("{},{},{},{},{},{}".format(
+                node, values["start"], 0, values["coordinator"], 
+                values["end"], values["total"]
+            ))
 
 
 clean()
