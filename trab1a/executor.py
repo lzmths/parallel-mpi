@@ -84,13 +84,18 @@ def generate_metrics():
         if tag:
             node, time = get_node_time(line, typo)
             key = "{},{},{}".format(nodes, function, node)
-            data[key][tag] = time
+            if tag not in data[key]:
+                data[key][tag] = 0.0
+            if "count" not in data[key]:
+                data[key]["count"] = 0
+            data[key][tag] += time
+            data[key]["count"] += 1
         elif "mpirun -np" in line:
             nodes, function = build_head(line)
 
     print("nodes,function,node,quad,total")
     for node, values in OrderedDict(sorted(data.items())).items():
-        print("{},{},{}".format(node, values["quad"], values["total"]))
+        print("{},{},{}".format(node, values["quad"]/values["count"], values["total"]/values["count"]))
 
 
 clean()

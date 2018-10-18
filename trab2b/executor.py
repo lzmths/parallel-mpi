@@ -94,7 +94,12 @@ def generate_metrics():
         if tag:
             node, time = get_node_time(line, typo)
             key = "{},{},{}".format(nodes, function, node)
-            data[key][tag] = time
+            if tag not in data[key]:
+                data[key][tag] = 0.0
+            if "count" not in data[key]:
+                data[key]["count"] = 0
+            data[key][tag] += time
+            data[key]["count"] += 1
         elif "mpirun -np" in line:
             nodes, function = build_head(line)
 
@@ -102,13 +107,14 @@ def generate_metrics():
     for node, values in OrderedDict(sorted(data.items())).items():
         if "calc" in values:
             print("{},{},{},{},{},{}".format(
-                node, values["start"], values["calc"], 
-                values["net"], values["end"], values["total"]
+                node, values["start"]/values["count"], values["calc"]/values["count"], 
+                values["net"]/values["count"], values["end"]/values["count"], 
+                values["total"]/values["count"]
             ))
         else:
             print("{},{},{},{},{},{}".format(
-                node, values["start"], 0, values["coordinator"], 
-                values["end"], values["total"]
+                node, values["start"]/values["count"], 0, values["coordinator"]/values["count"], 
+                values["end"]/values["count"], values["total"]/values["count"]
             ))
 
 clean()
