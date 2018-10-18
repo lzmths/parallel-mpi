@@ -5,6 +5,7 @@ from subprocess import call
 
 IS_IN_CLUSTER = True
 SIZES=[1, 2, 4, 8]
+run = 10
 MATH_FUNCTIONS=1
 
 
@@ -42,8 +43,8 @@ def build():
 def execute():
     for execution in SIZES:
         for func in range(MATH_FUNCTIONS):
-            #command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
-            #run_commands([command])
+            command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
+            run_commands([command])
             command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} >> output.txt".format(execution, func)
             run_commands([command])
 
@@ -60,6 +61,11 @@ def build_head(head):
     nodes, _, _, function = [int(value) for value in values]
     return nodes, function
 
+def resize():
+    exp = 4
+    for j in range(exp):
+        for i in range(run - 1):
+            SIZE.insert(j * run, 2 ** j)
 
 def generate_metrics():
     arquive = open('output.txt')
@@ -89,5 +95,6 @@ def generate_metrics():
 
 clean()
 build()
+resize()
 execute()
 generate_metrics()
