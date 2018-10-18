@@ -66,6 +66,8 @@ def build_head(head):
 def generate_metrics():
     arquive = open('output.txt')
     nodes, function = build_head(next(arquive))
+    counts = defaultdict(int)
+    counts["{}-{}".format(nodes, function)] += 1
     data = defaultdict(dict)
     for line in arquive:
         line = line.strip()
@@ -96,25 +98,24 @@ def generate_metrics():
             key = "{},{},{}".format(nodes, function, node)
             if tag not in data[key]:
                 data[key][tag] = 0.0
-            if "count" not in data[key]:
-                data[key]["count"] = 0
             data[key][tag] += time
-            data[key]["count"] += 1
         elif "mpirun -np" in line:
             nodes, function = build_head(line)
+            counts["{}-{}".format(nodes, function)] += 1
 
-    print("nodes,function,node,start,calc,net,end,total")
+    print("nodes,function,node,start,calc,net,end,total,count")
     for node, values in OrderedDict(sorted(data.items())).items():
+        count = counts["{}-{}".format(*node.split(",")[0:2])]
         if "calc" in values:
-            print("{},{},{},{},{},{}".format(
-                node, values["start"]/values["count"], values["calc"]/values["count"], 
-                values["net"]/values["count"], values["end"]/values["count"], 
-                values["total"]/values["count"]
+            print("{},{},{},{},{},{},{}".format(
+                node, values["start"]/count, values["calc"]/count, 
+                values["net"]/count, values["end"]/count, 
+                values["total"]/count,count
             ))
         else:
-            print("{},{},{},{},{},{}".format(
-                node, values["start"]/values["count"], 0, values["coordinator"]/values["count"], 
-                values["end"]/values["count"], values["total"]/values["count"]
+            print("{},{},{},{},{},{},{}".format(
+                node, values["start"]/count, 0, values["coordinator"]/count, 
+                values["end"]/count, values["total"]/count,count
             ))
 
 clean()

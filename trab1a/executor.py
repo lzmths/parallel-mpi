@@ -35,8 +35,8 @@ def build():
         "mrexec all mpicc -o main main.c math_function.c -std=c11 -lm",
         "mpicc main.c math_function.c -o main -std=c11 -lm"
     ]
-    #if not IS_IN_CLUSTER:
-    #    commands = ["mpicc main.c math_function.c -o main -std=c11 -lm"]
+    if not IS_IN_CLUSTER:
+        commands = ["mpicc main.c math_function.c -o main -std=c11 -lm"]
     run_commands(commands)
 
 
@@ -61,15 +61,19 @@ def build_head(head):
     nodes, _, _, function = [int(value) for value in values]
     return nodes, function
 
+
 def resize():
     exp = 4
     for j in range(exp):
         for i in range(run - 1):
             SIZES.insert(j * run, 2 ** j)
 
+
 def generate_metrics():
     arquive = open('output.txt')
+    counts = defaultdict(int)
     nodes, function = build_head(next(arquive))
+    counts["{}-{}".format(nodes, function)] += 1
     data = defaultdict(dict)
     for line in arquive:
         line = line.strip()
@@ -86,16 +90,15 @@ def generate_metrics():
             key = "{},{},{}".format(nodes, function, node)
             if tag not in data[key]:
                 data[key][tag] = 0.0
-            if "count" not in data[key]:
-                data[key]["count"] = 0
             data[key][tag] += time
-            data[key]["count"] += 1
         elif "mpirun -np" in line:
             nodes, function = build_head(line)
+            counts["{}-{}".format(nodes, function)] += 1
 
-    print("nodes,function,node,quad,total")
+    print("nodes,function,node,quad,total,count")
     for node, values in OrderedDict(sorted(data.items())).items():
-        print("{},{},{}".format(node, values["quad"]/values["count"], values["total"]/values["count"]))
+        count = counts["{}-{}".format(*node.split(",")[0:2])]
+        print("{},{},{},{}".format(node, values["quad"]/count, values["total"]/count,count))
 
 
 clean()
