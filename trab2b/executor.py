@@ -4,7 +4,8 @@ from collections import defaultdict, OrderedDict
 
 IS_IN_CLUSTER = True
 SIZES=[2, 4, 8]
-MATH_FUNCTIONS=4
+run = 10
+MATH_FUNCTIONS=1
 
 
 def run_commands(commands):
@@ -34,10 +35,11 @@ def build():
         "mrcp all ./stack.h stack.h",
         "mrcp all ./math_function.c math_function.c",
         "mrcp all ./math_function.h math_function.h",
-        "mrexec all mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
+        "mrexec all mpicc -o main main.c math_function.c stack.c -std=c11 -lm",
+        "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
-        commands = ["mpicc main.c math_function.c stack.c -o main"]
+        commands = ["mpicc -o main main.c math_function.c stack.c -std=c11 -lm"]
     run_commands(commands)
 
 
@@ -46,7 +48,7 @@ def execute():
         for func in range(MATH_FUNCTIONS):
             command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
             run_commands([command])
-            command = "mpirun -np {} -hostfile host_file main 0 1 {} >> output.txt".format(execution, func)
+            command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} >> output.txt".format(execution, func)
             run_commands([command])
 
 
@@ -62,6 +64,11 @@ def build_head(head):
     nodes, _, _, function = [int(value) for value in values]
     return nodes, function
 
+def resize():
+    exp = 4
+    for j in range(exp):
+        for i in range(run - 1):
+            SIZES.insert(j * run, 2 ** j)
 
 def generate_metrics():
     arquive = open('output.txt')
@@ -120,5 +127,6 @@ def generate_metrics():
 
 clean()
 build()
+resize()
 execute()
 generate_metrics()
