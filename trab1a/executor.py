@@ -65,7 +65,7 @@ def resize():
     exp = 4
     for j in range(exp):
         for i in range(run - 1):
-            SIZE.insert(j * run, 2 ** j)
+            SIZES.insert(j * run, 2 ** j)
 
 def generate_metrics():
     arquive = open('output.txt')
