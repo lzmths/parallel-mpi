@@ -5,7 +5,7 @@ from subprocess import call
 
 IS_IN_CLUSTER = True
 SIZES=[1, 2, 4, 8]
-MATH_FUNCTIONS=4
+MATH_FUNCTIONS=1
 
 
 def run_commands(commands):
@@ -28,13 +28,13 @@ def build():
         "mrexec all rm -rf math_function.h",
         "mrexec all rm -rf math_function.c",
         "mrexec all rm -rf main",
-        "mrcp all ./main.c main.c",
-        "mrcp all ./math_function.c math_function.c",
-        "mrcp all ./math_function.h math_function.h",
-        "mrexec all mpicc -o main main.c -std=c11 -lm"
+        "mrcp all main.c main.c",
+        "mrcp all math_function.c math_function.c",
+        "mrcp all math_function.h math_function.h",
+        "mrexec all mpicc -o main main.c math_function.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
-        commands = ["mpicc main.c math_function.c -o main"]
+        commands = ["mpicc main.c math_function.c -o main -std=c11 -lm"]
     run_commands(commands)
 
 
@@ -43,7 +43,7 @@ def execute():
         for func in range(MATH_FUNCTIONS):
             command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
             run_commands([command])
-            command = "mpirun -np {} -hostfile host_file main 0 1 {} >> output.txt".format(execution, func)
+            command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} >> output.txt".format(execution, func)
             run_commands([command])
 
 
