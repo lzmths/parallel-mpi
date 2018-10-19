@@ -5,6 +5,8 @@
 #include "stack.h"
 #include "math_function.h"
 
+#define MAX_SIZE 1e-12
+
 #define FALSE 0
 #define TRUE 1
 #define PROCESSAR 1
@@ -89,6 +91,24 @@ double coordinator(int process, double start_at, double end_at, double interval)
     return result;
 }
 
+double calc_area(double left_size, double right_size) {
+    double base = (right_size - left_size);
+    double mid = (right_size + left_size) / 2.0;
+    double fmid = F(mid);
+    double larea = base * ( (F(left_size) + fmid) / 2.0 );
+    double rarea = base * ( (fmid + F(right_size)) / 2.0 );
+    
+    double total_area = larea;
+    double size = rarea - larea;
+    if (size < 0) { size *= -1; }
+    if (size > MAX_SIZE) {
+        larea = calc_area(left_size, mid);
+        rarea = calc_area(mid, right_size);
+        total_area = larea + rarea;
+    }
+    return total_area;
+}
+
 void executor(int me) {
     double start_con, end_con, con = 0.0;
     double start_calc, end_calc, calc = 0.0;
@@ -103,20 +123,8 @@ void executor(int me) {
     //printf("%d - RECEBI %d\n", me, status.MPI_TAG);
     while (status.MPI_TAG == PROCESSAR) {
         start_calc = MPI_Wtime();
-        double left = sync[0];
-        double right = sync[1];
-        double lrarea = (F(left) + F(right)) * (right - left)/2;
-        double mid, fmid, larea, rarea;
-
-        mid = (left + right)/2;
-        fmid = F(mid);
-        larea = (F(left) + fmid) * (mid - left)/2;
-        rarea = (fmid + F(right)) * (right - mid)/2;
-        double total_area = larea + rarea;
-
-        sync[0] = total_area; 
+        sync[0] = calc_area(sync[0], sync[1]);
         sync[1] = 0;
-        
         end_calc = MPI_Wtime();
         calc += end_calc - start_calc;
         start_con = MPI_Wtime();
