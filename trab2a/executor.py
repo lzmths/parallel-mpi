@@ -62,15 +62,15 @@ def get_node_time(line, split_base):
 
 def build_head(head):
     values = findall(r'\d+', head)
-    nodes, _, _, _, function = [int(value) for value in values]
-    return nodes, function
+    nodes, _, _, interval, function = [int(value) for value in values]
+    return nodes, interval, function
 
 
 def generate_metrics():
     arquive = open('output.txt')
-    nodes, function = build_head(next(arquive))
+    nodes, interval, function = build_head(next(arquive))
     counts = defaultdict(int)
-    counts["{}-{}".format(nodes, function)] += 1
+    counts["{}-{}-{}".format(nodes, interval, function)] += 1
     data = defaultdict(dict)
     for line in arquive:
         line = line.strip()
@@ -98,17 +98,17 @@ def generate_metrics():
 
         if tag:
             node, time = get_node_time(line, typo)
-            key = "{},{},{}".format(nodes, function, node)
+            key = "{},{},{},{}".format(nodes, interval, function, node)
             if tag not in data[key]:
                 data[key][tag] = 0.0
             data[key][tag] += time
         elif "mpirun -np" in line:
-            nodes, function = build_head(line)
-            counts["{}-{}".format(nodes, function)] += 1
+            nodes, interval, function = build_head(line)
+            counts["{}-{}-{}".format(nodes, interval, function)] += 1
 
-    print("nodes,function,node,start,calc,net,end,total,count")
+    print("nodes,interval,function,node,start,calc,net,end,total,count")
     for node, values in OrderedDict(sorted(data.items())).items():
-        count = counts["{}-{}".format(*node.split(",")[0:2])]
+        count = counts["{}-{}-{}".format(*node.split(",")[0:3])]
         if "calc" in values:
             print("{},{},{},{},{},{},{}".format(
                 node, values["start"]/count, values["calc"]/count, 
