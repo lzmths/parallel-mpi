@@ -1,0 +1,193 @@
+mpirun -np 1 main 0 1 0
+Time-around-quad (0): 278.738911
+Result: 2.13452500946141343618
+Time-total (0): 279.186127
+mpirun -np 1 main 0 1 1
+Time-around-quad (0): 59.893005
+Result: 1.46265174293227984137
+Time-total (0): 60.334841
+mpirun -np 1 main 0 1 0
+Time-around-quad (0): 271.252978
+Result: 2.13452500946141343618
+Time-total (0): 271.693570
+mpirun -np 1 main 0 1 1
+Time-around-quad (0): 55.828128
+Result: 1.46265174293227984137
+Time-total (0): 56.303671
+mpirun -np 1 main 0 1 0
+Time-around-quad (0): 266.587431
+Result: 2.13452500946141343618
+Time-total (0): 267.021310
+mpirun -np 1 main 0 1 1
+Time-around-quad (0): 59.475403
+Result: 1.46265174293227984137
+Time-total (0): 59.911161
+mpirun -np 2 main 0 1 0
+Time-around-quad (0): 134.068851
+Time-around-quad (1): 317.470920
+Time-total (1): 317.945115
+Result: 2.13452500946141343618
+Time-total (0): 317.948460
+mpirun -np 2 main 0 1 1
+Time-around-quad (0): 29.788748
+Time-around-quad (1): 57.938044
+Time-total (1): 58.419806
+Result: 1.46265174293227984137
+Time-total (0): 58.425814
+mpirun -np 2 main 0 1 0
+Time-around-quad (0): 142.254045
+Time-around-quad (1): 362.886763
+Time-total (1): 363.373989
+Result: 2.13452500946141343618
+Time-total (0): 363.377153
+mpirun -np 2 main 0 1 1
+Time-around-quad (0): 25.915342
+Time-around-quad (1): 57.882470
+Time-total (1): 58.344966
+Result: 1.46265174293227984137
+Time-total (0): 58.349872
+mpirun -np 2 main 0 1 0
+Time-around-quad (0): 114.549445
+Time-around-quad (1): 305.354158
+Time-total (1): 305.849919
+Result: 2.13452500946141343618
+Time-total (0): 305.843977
+mpirun -np 2 main 0 1 1
+Time-around-quad (0): 29.334354
+Time-around-quad (1): 46.909742
+Time-total (1): 47.375042
+Result: 1.46265174293227984137
+Time-total (0): 47.377192
+mpirun -np 4 main 0 1 0
+Time-around-quad (0): 66.006678
+Time-around-quad (2): 96.669311
+Time-total (2): 97.170457
+Time-around-quad (3): 125.707766
+Time-total (3): 126.204194
+Time-around-quad (1): 170.990670
+Time-total (1): 171.493664
+Result: 2.13452500946141343618
+Time-total (0): 171.497286
+mpirun -np 4 main 0 1 1
+Time-around-quad (0): 10.089196
+Time-around-quad (1): 13.354562
+Time-total (1): 13.851822
+Time-around-quad (2): 15.914819
+Time-total (2): 16.409350
+Time-around-quad (3): 47.709213
+Time-total (3): 48.200594
+Result: 1.46265174293227961932
+Time-total (0): 48.212112
+mpirun -np 4 main 0 1 0
+Time-around-quad (0): 73.551054
+Time-around-quad (2): 88.097814
+Time-total (2): 88.628618
+Time-around-quad (3): 108.764235
+Time-total (3): 109.279586
+Time-around-quad (1): 151.283740
+Time-total (1): 151.819915
+Result: 2.13452500946141343618
+Time-total (0): 151.820951
+mpirun -np 4 main 0 1 1
+Time-around-quad (0): 11.014525
+Time-around-quad (2): 18.779259
+Time-total (2): 19.317938
+Time-around-quad (3): 28.213113
+Time-total (3): 28.746654
+Time-around-quad (1): 53.734181
+Result: 1.46265174293227961932
+Time-total (0): 54.290339
+Time-total (1): 54.286744
+mpirun -np 4 main 0 1 0
+Time-around-quad (0): 47.708595
+Time-around-quad (2): 105.658594
+Time-total (2): 106.214985
+Time-around-quad (3): 129.970519
+Time-total (3): 130.513718
+Time-around-quad (1): 176.021685
+Time-total (1): 176.575000
+Result: 2.13452500946141343618
+Time-total (0): 176.578180
+mpirun -np 4 main 0 1 1
+Time-around-quad (0): 11.955278
+Time-around-quad (2): 22.752452
+Time-total (2): 23.288563
+Time-around-quad (3): 32.962905
+Time-total (3): 33.489890
+Time-around-quad (1): 41.381000
+Time-total (1): 41.920231
+Result: 1.46265174293227961932
+Time-total (0): 41.915591
+mpirun -np 8 main 0 1 0
+Time-around-quad (0): 14.646027
+Time-around-quad (4): 24.654949
+Time-around-quad (3): 28.036375
+Time-total (3): 28.541316
+Time-around-quad (2): 31.231121
+Time-total (2): 31.737317
+Time-around-quad (6): 31.434129
+Time-around-quad (5): 32.890131
+Time-total (5): 33.390257
+Time-around-quad (7): 43.939326
+Time-total (7): 44.436365
+Time-total (6): 44.438113
+Time-total (4): 44.443343
+Time-around-quad (1): 45.264360
+Time-total (1): 45.777880
+Result: 2.13452500946141343618
+Time-total (0): 45.778897
+mpirun -np 8 main 0 1 1
+Time-around-quad (4): 5.278653
+Time-around-quad (5): 5.323520
+Time-total (5): 5.823093
+Time-around-quad (2): 5.527189
+Time-around-quad (0): 5.896780
+Time-around-quad (6): 5.937415
+Time-around-quad (1): 7.069976
+Time-total (1): 7.575394
+Time-around-quad (3): 10.176607
+Time-total (3): 10.667892
+Time-total (2): 10.670711
+Time-around-quad (7): 10.492972
+Time-total (7): 10.988743
+Time-total (6): 10.990199
+Result: 1.46265174293227984137
+Time-total (0): 11.006334
+Time-total (4): 10.997557
+mpirun -np 8 main 0 1 0
+Time-around-quad (0): 23.698009
+Time-around-quad (4): 24.661428
+Time-around-quad (2): 25.524108
+Time-around-quad (3): 26.634800
+Time-total (3): 27.148666
+Time-total (2): 27.154294
+Time-around-quad (1): 30.862557
+Time-total (1): 31.382381
+Time-around-quad (6): 31.145281
+Time-around-quad (5): 31.424023
+Time-total (5): 31.932366
+Time-around-quad (7): 43.947290
+Time-total (7): 44.452382
+Time-total (6): 44.454060
+Result: 2.13452500946141343618
+Time-total (0): 44.477022
+Time-total (4): 44.463913
+mpirun -np 8 main 0 1 1
+Time-around-quad (0): 3.069232
+Time-around-quad (4): 5.198063
+Time-around-quad (5): 5.212706
+Time-total (5): 5.712878
+Time-around-quad (2): 5.323958
+Time-around-quad (6): 5.849624
+Time-around-quad (1): 10.154063
+Time-total (1): 10.670734
+Time-around-quad (7): 10.402531
+Time-total (7): 10.899234
+Time-total (6): 10.899868
+Time-total (4): 10.909431
+Time-around-quad (3): 14.663915
+Time-total (3): 15.169905
+Time-total (2): 15.181079
+Result: 1.46265174293227984137
+Time-total (0): 15.182917
+

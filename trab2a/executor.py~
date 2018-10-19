@@ -4,7 +4,7 @@ from re import findall
 from subprocess import call
 
 IS_IN_CLUSTER = True
-SIZES=[1, 2, 4]
+SIZES=[1, 2, 4, 8]
 run = 10
 MATH_FUNCTIONS=2
 
@@ -106,3 +106,4 @@ build()
 resize()
 execute()
 generate_metrics()
+
