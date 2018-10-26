@@ -5,7 +5,7 @@
 #include "stack.h"
 #include "math_function.h"
 
-#define MAX_SIZE 1e-12
+#define MAX_SIZE 1e-16
 
 #define FALSE 0
 #define TRUE 1
@@ -92,19 +92,16 @@ double coordinator(int process, double start_at, double end_at, double interval)
 }
 
 double calc_area(double left_size, double right_size) {
-    double base = (right_size - left_size);
     double mid = (right_size + left_size) / 2.0;
     double fmid = F(mid);
-    double larea = base * ( (F(left_size) + fmid) / 2.0 );
-    double rarea = base * ( (fmid + F(right_size)) / 2.0 );
-    
-    double total_area = larea;
-    double size = rarea - larea;
+    double rarea = (right_size - mid) * (F(right_size));
+    double larea = (mid - left_size) * (F(left_size));
+    double total_area = (right_size - left_size) * F(mid);
+    double size = total_area - (larea + rarea);
     if (size < 0) { size *= -1; }
-    if (size > MAX_SIZE) {
+    if (size >= MAX_SIZE) {
         larea = calc_area(left_size, mid);
         rarea = calc_area(mid, right_size);
-        total_area = larea + rarea;
     }
     return total_area;
 }

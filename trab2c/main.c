@@ -96,23 +96,17 @@ void executor(int me) {
     //printf("%d - RECEBI %d\n", me, status.MPI_TAG);
     while (status.MPI_TAG == PROCESSAR) {
         start_calc = MPI_Wtime();
-        double left = sync[0];
-        double right = sync[1];
-        double lrarea = (F(left) + F(right)) * (right - left)/2;
-        double mid, fmid, larea, rarea;
-
-        mid = (left + right)/2;
-        fmid = F(mid);
-        larea = (F(left) + fmid) * (mid - left)/2;
-        rarea = (fmid + F(right)) * (right - mid)/2;
-        double total_area = larea + rarea;
-
-        double size = (total_area) - lrarea;
-        if (size < 0){
-            size *= -1;
-        }
+        double left_size = sync[0];
+        double right_size = sync[1];
+        double mid = (right_size + left_size) / 2.0;
+        double fmid = F(mid);
+        double rarea = (right_size - mid) * (F(right_size));
+        double larea = (mid - left_size) * (F(left_size));
+        double total_area = (right_size - left_size) * F(mid);
+        double size = total_area - (larea + rarea);
+        if (size < 0) { size *= -1; }
         if (size > MAX_SIZE) {
-            sync[0] = left; 
+            sync[0] = left_size; 
             sync[1] = mid;
             end_calc = MPI_Wtime();
             calc += end_calc - start_calc;
@@ -121,7 +115,7 @@ void executor(int me) {
             end_con = MPI_Wtime();
             con += end_con - start_con;
             sync[0] = mid;
-            sync[1] = right; 
+            sync[1] = right_size; 
             continue;
         }
         else {
