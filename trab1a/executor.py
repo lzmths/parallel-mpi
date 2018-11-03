@@ -31,7 +31,7 @@ def build():
         "mrexec all rm -rf ./parallel-mpi/",
         "mrexec all git clone https://github.com/lzmths/parallel-mpi.git",
         "mrexec all mpicc -o {0}/main {0}/main.c {0}/math_function.c -std=c11 -lm".format(current_path),
-        "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
+        "mpicc -o main main.c math_function.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
         commands = ["mpicc main.c math_function.c -o main -std=c11 -lm"]
