@@ -1,6 +1,8 @@
+from collections import defaultdict, OrderedDict
+from os.path import dirname, realpath
 from re import findall
 from subprocess import call
-from collections import defaultdict, OrderedDict
+
 
 IS_IN_CLUSTER = True
 SIZES=[2, 4, 8]
@@ -23,12 +25,11 @@ def clean():
 
 
 def build():
-    from os.path import dirname, realpath
     current_path = dirname(realpath(__file__))
     commands = [
         "mrexec all rm -rf ./parallel-mpi/",
         "mrexec all git clone https://github.com/lzmths/parallel-mpi.git",
-        "mrexec all mpicc -o {}/main {}/main.c {}/math_function.c {}/stack.c -std=c11 -lm".format(current_path),
+        "mrexec all mpicc -o {0}/main {0}/main.c {0}/math_function.c {0}/stack.c -std=c11 -lm".format(current_path),
         "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:

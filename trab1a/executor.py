@@ -1,7 +1,9 @@
 from collections import defaultdict, OrderedDict
-from os import getenv
+from os.path import dirname, realpath
 from re import findall
 from subprocess import call
+from collections import defaultdict, OrderedDict
+
 
 IS_IN_CLUSTER = True
 SIZES=[1, 2, 4]
@@ -24,16 +26,12 @@ def clean():
 
 
 def build():
+    current_path = dirname(realpath(__file__))
     commands = [
-        "mrexec all rm -rf main.c",
-        "mrexec all rm -rf math_function.h",
-        "mrexec all rm -rf math_function.c",
-        "mrexec all rm -rf main",
-        "mrcp all main.c main.c",
-        "mrcp all math_function.c math_function.c",
-        "mrcp all math_function.h math_function.h",
-        "mrexec all mpicc -o main main.c math_function.c -std=c11 -lm",
-        "mpicc main.c math_function.c -o main -std=c11 -lm"
+        "mrexec all rm -rf ./parallel-mpi/",
+        "mrexec all git clone https://github.com/lzmths/parallel-mpi.git",
+        "mrexec all mpicc -o {0}/main {0}/main.c {0}/math_function.c -std=c11 -lm".format(current_path),
+        "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
         commands = ["mpicc main.c math_function.c -o main -std=c11 -lm"]
