@@ -42,7 +42,7 @@ def execute():
             for interval in INTERVALS:
                 command = "echo 'mpirun -np {} main 0 1 {} {}' >> output.txt".format(execution, interval, func)
                 run_commands([command])
-                command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} {} >> output.txt".format(execution, interval, func)
+                command = "mpirun -np {} -hostfile ../../host_file ./main 0 1 {} {} >> output.txt".format(execution, interval, func)
                 run_commands([command])
 
 
