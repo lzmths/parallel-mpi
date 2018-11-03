@@ -32,14 +32,17 @@ double calc_area(double left_size, double right_size) {
     return total_area;
 }
 
-void main(int argc, char **argv) {
+int main(int argc, char **argv) {
+    int initialized, finalized;
+    MPI_Initialized(&initialized);
+    if (!initialized)
+        MPI_Init(&argc, &argv);
+
     double start = MPI_Wtime();
     double end;
     int ierr, num_procs, id;
     double result, result_total, left_size, right_size;
     
-    ierr = MPI_Init(&argc, &argv);
-
     ierr = MPI_Comm_rank(MPI_COMM_WORLD, &id);
     ierr = MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
         
@@ -64,5 +67,8 @@ void main(int argc, char **argv) {
     }
     printf("Time-total (%d): %f\n", id, end - start);
     
-    ierr = MPI_Finalize();
+    MPI_Finalized(&finalized);
+    if (!finalized)
+        MPI_Finalize();
+    return 0;
 }

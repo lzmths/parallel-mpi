@@ -24,19 +24,7 @@ def clean():
 
 def build():
     commands = [
-        "mrexec all rm -rf main.c",
-        "mrexec all rm -rf stack.h",
-        "mrexec all rm -rf stack.c",
-        "mrexec all rm -rf math_function.h",
-        "mrexec all rm -rf math_function.c",
-        "mrexec all rm -rf main",
-        "mrcp all ./main.c main.c",
-        "mrcp all ./stack.c stack.c",
-        "mrcp all ./stack.h stack.h",
-        "mrcp all ./math_function.c math_function.c",
-        "mrcp all ./math_function.h math_function.h",
-        "mrexec all mpicc -o main main.c math_function.c stack.c -std=c11 -lm",
-        "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
+        "mrexec git pull",
     ]
     if not IS_IN_CLUSTER:
         commands = ["mpicc -o main main.c math_function.c stack.c -std=c11 -lm"]
@@ -48,7 +36,7 @@ def execute():
         for func in range(MATH_FUNCTIONS):
             command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
             run_commands([command])
-            command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} >> output.txt".format(execution, func)
+            command = "mpirun -np {} -hostfile ../../host_file ./main 0 1 {} >> output.txt".format(execution, func)
             run_commands([command])
 
 

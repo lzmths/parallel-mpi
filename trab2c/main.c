@@ -141,6 +141,11 @@ void executor(int me) {
 }
 
 int main(int argc, char **argv ) {
+    int initialized, finalized;
+    MPI_Initialized(&initialized);
+    if (!initialized)
+        MPI_Init(&argc, &argv);
+
     double start = MPI_Wtime();
     double end;
     int i, myid, numprocs;
@@ -149,7 +154,6 @@ int main(int argc, char **argv ) {
     double end_at = atof(argv[2]);
     function_id = atoi(argv[3]);
 
-    MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &myid);
     
@@ -180,7 +184,8 @@ int main(int argc, char **argv ) {
         printf("Time-diff-end-end (%d): %f\n", myid, end - end_executor);
     }
     printf("Time (%d): %f\n", myid, end - start);
-    
-    MPI_Finalize();
+    MPI_Finalized(&finalized);
+    if (!finalized)
+        MPI_Finalize();
     return 0;
 }
