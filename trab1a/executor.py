@@ -43,7 +43,7 @@ def execute():
         for func in range(MATH_FUNCTIONS):
             command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
             run_commands([command])
-            command = "mpirun -np {} -hostfile ../../host_file main 0 1 {} >> output.txt".format(execution, func)
+            command = "mpirun -np {} -hostfile ../../host_file ./main 0 1 {} >> output.txt".format(execution, func)
             run_commands([command])
 
 

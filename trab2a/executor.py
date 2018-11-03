@@ -32,7 +32,7 @@ def build():
         "mpicc -o main main.c math_function.c stack.c -std=c11 -lm"
     ]
     if not IS_IN_CLUSTER:
-        commands = ["mpicc main.c math_function.c stack.c -o main -std=c11 -lm"]
+        commands = ["mpicc main.c math_function.c stack.c -o ./main -std=c11 -lm"]
     run_commands(commands)
 
 
