@@ -6,8 +6,8 @@ from subprocess import call
 
 IS_IN_CLUSTER = True
 SIZES=[2, 4, 8]
-run = 10
-MATH_FUNCTIONS=2
+run = 3
+MATH_FUNCTIONS=3
 
 
 def run_commands(commands):
@@ -40,9 +40,9 @@ def build():
 def execute():
     for execution in SIZES:
         for func in range(MATH_FUNCTIONS):
-            command = "echo 'mpirun -np {} main 0 1 {}' >> output.txt".format(execution, func)
+            command = "echo 'mpirun -np {} main 0 5 {}' >> output.txt".format(execution, func)
             run_commands([command])
-            command = "mpirun -np {} -hostfile ../../host_file ./main 0 1 {} >> output.txt".format(execution, func)
+            command = "mpirun -np {} -hostfile ../../host_file ./main 0 5 {} >> output.txt".format(execution, func)
             run_commands([command])
 
 
