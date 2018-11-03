@@ -5,7 +5,7 @@ from subprocess import call
 
 
 IS_IN_CLUSTER = True
-SIZES=[2, 2, 2, 4, 4, 4]
+SIZES=[2, 2, 2, 4, 4, 4, 8, 8, 8]
 MATH_FUNCTIONS=3
 INTERVALS=[32,128,1024]
 
